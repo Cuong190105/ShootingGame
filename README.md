@@ -9,4 +9,5 @@ Di chuyển nhân vật, bắn đạn, kiểm tra và giải quyết va chạm.
 ## Chạy test
 
 Cài đặt pytest: `pip install pytest`
+
 Chạy: `pytest test.py`
