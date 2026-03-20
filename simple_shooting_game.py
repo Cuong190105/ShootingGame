@@ -28,10 +28,10 @@ class Player(Object):
     def move(self):
         x_part = (self.move_dir[0] * -1 + self.move_dir[1])
         y_part = (self.move_dir[2] * -1 + self.move_dir[3])
-        magnitude = (x_part ** 2 + y_part ** 2) ** 0.5
+        magnitude = round((x_part ** 2 + y_part ** 2) ** 0.5, 3)
         if magnitude > 0:
-            norm_x = x_part / magnitude
-            norm_y = y_part / magnitude
+            norm_x = round(x_part / magnitude, 3)
+            norm_y = round(y_part / magnitude, 3)
             dx = norm_x * self.speed
             dy = norm_y * self.speed
             super().move(dx, dy)
@@ -39,14 +39,14 @@ class Player(Object):
     def shoot(self, target_x, target_y):
         direction_x = target_x - self.x
         direction_y = target_y - self.y
-        magnitude = (direction_x ** 2 + direction_y ** 2) ** 0.5
+        magnitude = round((direction_x ** 2 + direction_y ** 2) ** 0.5, 3)
         if magnitude == 0:
             return None
-        norm_x = direction_x / magnitude
-        norm_y = direction_y / magnitude
+        norm_x = round(direction_x / magnitude, 3)
+        norm_y = round(direction_y / magnitude, 3)
         bullet_speed_x = norm_x * self.bullet_speed
         bullet_speed_y = norm_y * self.bullet_speed
-        return Bullet(f"{self.name}_bullet", self.damage, bullet_speed_x, bullet_speed_y, self.x, self.y, 5)
+        return Bullet(f"{self.name}_b", self.damage, bullet_speed_x, bullet_speed_y, self.x, self.y, 5)
 
     def take_damage(self, amount):
         self.health -= amount
@@ -63,6 +63,12 @@ class Bullet(Object):
         self.damage = damage
         self.dx = speedX
         self.dy = speedY
+        
+    def __init__(self, name, x, y, size = 10):
+        super().__init__(name, x, y, size)
+        self.damage = 0
+        self.dx = 0
+        self.dy = 0
 
     def __str__(self):
         return f"Bullet: {self.name} at ({self.x}, {self.y}) with damage {self.damage}"
@@ -130,16 +136,16 @@ class Game:
                 for p1 in cell['players']:
                     for p2 in cell['players']:
                         if p1 != p2 and self.check_collision(p1, p2):
-                            diffX = (p1.x - p2.x) / 2
-                            diffY = (p1.y - p2.y) / 2
+                            diffX = round((p1.x - p2.x) / 2, 3)
+                            diffY = round((p1.y - p2.y) / 2, 3)
                             overlapX = p1.size - abs(diffX)
                             overlapY = p1.size - abs(diffY)
                             if overlapX < overlapY:
-                                shiftX = overlapX / 2 if diffX > 0 else -overlapX / 2
+                                shiftX = round(overlapX / 2, 3) if diffX > 0 else round(-overlapX / 2, 3)
                                 p1.move(shiftX, 0)
                                 p2.move(-shiftX, 0)
                             else:
-                                shiftY = overlapY / 2 if diffY > 0 else -overlapY / 2
+                                shiftY = round(overlapY / 2, 3) if diffY > 0 else round(-overlapY / 2, 3)
                                 p1.move(0, shiftY)
                                 p2.move(0, -shiftY)
                     if self.check_collision(p1):
@@ -166,8 +172,8 @@ class Game:
     def check_collision(self, obj1, obj2 = None):
         # If only one object is provided, check for collisions with world bound
         if obj2 is None:
-            return (obj1.x < 0 or obj1.x + obj1.size >= self.BOARDWIDTH or
-                    obj1.y < 0 or obj1.y + obj1.size >= self.BOARDHEIGHT)
+            return (obj1.x < 0 or obj1.x + obj1.size > self.BOARDWIDTH or
+                    obj1.y < 0 or obj1.y + obj1.size > self.BOARDHEIGHT)
 
         # Check for correct type, raise Error if not, maybe?
         if not (isinstance(obj1, Object) and isinstance(obj2, Object)):
@@ -191,13 +197,22 @@ class Game:
         # shape there is still a chance that only the corner of player 
         # hits the bullet's bounding box, not the bullet itself.
         if firstCheck and isinstance(obj2, Bullet):
+            if obj1.name in obj2.name:
+                return False
+            
             centerX = obj2.x + obj2.size / 2
             centerY = obj2.y + obj2.size / 2
-            closestX = obj1.x if centerX < obj1.x else obj1.x + obj1.size
-            closestY = obj1.y if centerY < obj1.y else obj1.y + obj1.size
-            distanceX = centerX - closestX
-            distanceY = centerY - closestY
-            return (distanceX ** 2 + distanceY ** 2) < (obj2.size / 2) ** 2
+            closestX = obj1.x if centerX < obj1.x else obj1.x + obj1.size if centerX > obj1.x + obj1.size else centerX
+            closestY = obj1.y if centerY < obj1.y else obj1.y + obj1.size if centerY > obj1.y + obj1.size else centerY
+
+            if closestX == centerX and closestY == centerY:
+                return True
+
+            distX = centerX - closestX
+            distY = centerY - closestY
+            distanceSquared = distX * distX + distY * distY
+            print(closestX, closestY, distX, distY, distanceSquared)
+            return distanceSquared < (obj2.size / 2) ** 2
         
         return firstCheck
 
