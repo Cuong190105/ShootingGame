@@ -197,7 +197,7 @@ class Game:
         # shape there is still a chance that only the corner of player 
         # hits the bullet's bounding box, not the bullet itself.
         if firstCheck and isinstance(obj2, Bullet):
-            if obj1.name in obj2.name:
+            if obj1.name + "_b" == obj2.name:
                 return False
             
             centerX = obj2.x + obj2.size / 2
@@ -211,7 +211,6 @@ class Game:
             distX = centerX - closestX
             distY = centerY - closestY
             distanceSquared = distX * distX + distY * distY
-            print(closestX, closestY, distX, distY, distanceSquared)
             return distanceSquared < (obj2.size / 2) ** 2
         
         return firstCheck

@@ -109,10 +109,10 @@ class TestCheckCollision:
         (Player("p1", 200, 300), Bullet("p2_b", 230.001, 310), False),  # max+ x, norm y
         
         (Player("p1", 200, 300), Bullet("p2_b", 210, 289.999), False),   # norm x, min- y
-        (Player("p1", 200, 300), Bullet("p2_b", 210, 290), False),           # norm x, min y
+        (Player("p1", 200, 300), Bullet("p2_b", 210, 290), False),       # norm x, min y
         (Player("p1", 200, 300), Bullet("p2_b", 210, 290.001), True),    # norm x, min+ y
         (Player("p1", 200, 300), Bullet("p2_b", 210, 329.999), True),    # norm x, max- y
-        (Player("p1", 200, 300), Bullet("p2_b", 210, 330), False),           # norm x, max y
+        (Player("p1", 200, 300), Bullet("p2_b", 210, 330), False),       # norm x, max y
         (Player("p1", 200, 300), Bullet("p2_b", 210, 330.001), False),   # norm x, max+ y
 
         # Center of bullet is not on the player when casting on any axis

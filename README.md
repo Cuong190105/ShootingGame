@@ -9,5 +9,6 @@ Di chuyển nhân vật, bắn đạn, kiểm tra và giải quyết va chạm.
 ## Chạy test
 
 Cài đặt pytest: `pip install pytest`
-
-Chạy: `pytest test.py`
+Chạy:
+Kiểm thử chức năng `pytest blackbox_test.py`
+Kiểm thử luồng điều khiển `pytest cf_test.py`
