@@ -194,12 +194,14 @@ class Game:
                     obj1.y + obj1.size > obj2.y)
 
         # Bullet may have its bounding box collided, but for its circular
-        # shape there is still a chance that only the corner of player 
+        # shape there is still a case that only the corner of player 
         # hits the bullet's bounding box, not the bullet itself.
         if firstCheck and isinstance(obj2, Bullet):
             if obj1.name + "_b" == obj2.name:
                 return False
             
+            # (centerX, centerY): center of the bullet
+            # (closestX, closestY): closest point on the player to the center of the bullet
             centerX = obj2.x + obj2.size / 2
             centerY = obj2.y + obj2.size / 2
             closestX = obj1.x if centerX < obj1.x else obj1.x + obj1.size if centerX > obj1.x + obj1.size else centerX
