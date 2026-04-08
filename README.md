@@ -17,4 +17,4 @@ Kiểm thử chức năng: `pytest blackbox_test.py`
 Kiểm thử luồng điều khiển: `pytest cf_test.py --cov-report=html --cov-branch`  
 Mở file `./htmlcov/function_index.html`, tìm hàm `Game.handle_collision` để xem chi tiết.
 
-Kiểm thử luồng dữ liệu:
+Kiểm thử luồng dữ liệu: `pytest df_test.py`
