@@ -22,8 +22,8 @@ class TestCheckCollision:
         assert game.check_collision(obj1, obj2) == True
     
     def test_path4(self, game):
-        obj1 = Bullet("p1_b", 200, 300)
-        assert game.check_collision(obj1) == False
+        obj1 = Bullet("p1_b", -10, 300)
+        assert game.check_collision(obj1) == True
     
     def test_path5(self, game):
         obj1 = Player("p1", 200, 300)
@@ -102,8 +102,8 @@ class TestCheckCollision:
         assert game.check_collision(obj1, obj2) == False
 
     def test_path21(self, game):
-        obj1 = Bullet("p1_b", 210, 500)
-        obj2 = Player("p2", 200, 300)
+        obj1 = Player("p1", 200, 300)
+        obj2 = Player("p2", 210, 500)
         assert game.check_collision(obj1, obj2) == False
 
     def test_path22(self, game):
